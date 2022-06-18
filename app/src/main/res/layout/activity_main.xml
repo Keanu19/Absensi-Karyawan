@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Selamat Datang"
+        android:textAlignment="center"
+        android:textSize="50px"/>
+
+    <TextView
+        android:id="@+id/textName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textSize="50px"/>
+
+    <android.widget.TextClock
+        android:id="@+id/textTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="150px"
+        android:layout_marginTop="100px"
+        android:timeZone="GMT+7"
+        android:format24Hour="HH:mm"
+        android:format12Hour="@null"
+        />
+
+    <android.widget.TextClock
+        android:id="@+id/textDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="60px"
+        android:timeZone="GMT+7"
+        android:format24Hour="dd/MM/yyyy"
+        android:format12Hour="@null"
+        />
+
+    <Button
+        android:id="@+id/buttonMasuk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Masuk"
+        android:layout_marginTop="50px"
+        android:layout_marginLeft="300px"
+        android:layout_marginRight="300px" />
+
+    <Button
+        android:id="@+id/buttonKeluar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Keluar"
+        android:layout_marginTop="5px"
+        android:layout_marginLeft="300px"
+        android:layout_marginRight="300px"/>
+
+
+</LinearLayout>
