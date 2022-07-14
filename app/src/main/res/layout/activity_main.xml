@@ -66,5 +66,25 @@
         android:layout_marginLeft="300px"
         android:layout_marginRight="300px"/>
 
+    <Button
+        android:id="@+id/buttonDaftarWajah"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Daftarkan Wajah"
+        android:layout_marginTop="5px"
+        android:layout_marginLeft="300px"
+        android:layout_marginRight="300px"/>
+
+    <Button
+        android:id="@+id/buttonLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:layout_marginTop="5px"
+        android:layout_marginLeft="300px"
+        android:layout_marginRight="300px"
+        android:onClick="logout"
+        />
+
 
 </LinearLayout>
