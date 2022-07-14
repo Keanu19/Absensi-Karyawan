@@ -35,13 +35,15 @@ import java.sql.Date;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity{
-    Button buttonMasuk, buttonKeluar;
+    Button buttonMasuk, buttonKeluar, buttonDaftarWajah;
     TextView textName;
     TextClock textTime,textDate;
 //    SimpleDateFormat dateFormat, timeFormat;
 //    Calendar calender;
 //    String date;
 //    String time;
+    String name;
+    SessionManager sessionManager;
 
 
 
@@ -52,9 +54,11 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         buttonMasuk = findViewById(R.id.buttonMasuk);
         buttonKeluar = findViewById(R.id.buttonKeluar);
+        buttonDaftarWajah = findViewById(R.id.buttonDaftarWajah);
         textName = findViewById(R.id.textName);
         textTime = findViewById(R.id.textTime);
         textDate = findViewById(R.id.textDate);
+
 //        calender = Calendar.getInstance();
 
         //Tombol Masuk
@@ -65,11 +69,37 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-        //TextView Nama User
-        textName.setText("keanu");
+        //menampilkan nama user dari sessionmanager
+        //name = sessionManager.getUserDetail().get(SessionManager.USERNAME);
+        textName.setText("Keanu");
+
         this.textDate.setFormat12Hour(null);
         this.textTime.setFormat12Hour(null);
 
+    }
+
+    public void logout(View view) {
+        //User agar bisa Logut
+        sessionManager = new SessionManager(MainActivity.this);
+        //Remove session
+        sessionManager.logoutSession();
+        //pindah ke Login page
+        MoveToLogin();
+    }
+
+//    public void logout(View view) {
+//        //User agar bisa Logut
+//        SessionManagement sessionManagement = new SessionManagement(MainActivity.this);
+//        //Remove session
+//        sessionManagement.removeSession();
+//        //pindah ke Login page
+//        MoveToLogin();
+//    }
+
+    private void MoveToLogin() {
+        Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
 //    private void displayTimeDate(){
