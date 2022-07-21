@@ -17,6 +17,9 @@ public class SessionManager {
     public static final String USER_ID = "user_id";
     public static final String USERNAME = "username";
     public static final String NAME = "name";
+    public static final String DIVISI = "divisi";
+    public static final String JOBDESK = "jobdesk";
+    public static final String FACEID = "faceid";
 
     public SessionManager (Context context){
         this._context = context;
@@ -29,6 +32,9 @@ public class SessionManager {
         editor.putString(USER_ID, user.getUserId());
         editor.putString(USERNAME, user.getUsername());
         editor.putString(NAME, user.getName());
+        editor.putString(DIVISI, user.getDivisi());
+        editor.putString(JOBDESK, user.getJobdesk());
+        editor.putString(FACEID, user.getFaceid());
         editor.commit();
     }
 
@@ -39,6 +45,9 @@ public class SessionManager {
         user.put(NAME, sharedPreferences.getString(NAME,null));
         return user;
     }
+
+
+
 
     public void logoutSession(){
         editor.clear().commit();

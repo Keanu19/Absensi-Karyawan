@@ -1,13 +1,20 @@
 package com.example.absensikaryawan;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.media.FaceDetector;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -61,12 +68,18 @@ public class OpenCamera extends AppCompatActivity implements CameraBridgeViewBas
     //face_recognition face_recognition;
     //face_recognition file
     Interpreter interpreter;
-    int INPUT_SIZE = 224;
+    int INPUT_SIZE = 96;
     int height = 0;
     int width = 0;
     GpuDelegate gpuDelegate= null;
     AssetManager assetManager;
     String modelpath = "model.tflite";
+    SessionManager sessionManager;
+    String USER_ID;
+    String USER_NAME;
+    Handler handler = new Handler();
+    TextView countdown;
+    int viewInvisible = View.INVISIBLE;
 
 
     BaseLoaderCallback baseLoaderCallback = new BaseLoaderCallback(OpenCamera.this) {
@@ -90,7 +103,12 @@ public class OpenCamera extends AppCompatActivity implements CameraBridgeViewBas
                         e.printStackTrace();
                     }
 
+                    //Get Data Karyawan
+                    SessionManager sessionManager = new SessionManager(OpenCamera.this);
+                    USER_ID = sessionManager.getUserDetail().get(SessionManager.USER_ID);
+                    USER_NAME = sessionManager.getUserDetail().get(SessionManager.USERNAME);
 
+                    //Inisisasi HaarCascade
                     InputStream is = getResources().openRawResource(R.raw.haarcascade_frontalface_default);
                     File cascadeDir =  getDir("cascade",MODE_PRIVATE);
                     cascfile = new File(cascadeDir, "haarcascade_frontalface_default.xml");
@@ -155,6 +173,8 @@ public class OpenCamera extends AppCompatActivity implements CameraBridgeViewBas
         javaCameraView.setCvCameraViewListener(OpenCamera.this);
         //set kamera depan
         javaCameraView.setCameraIndex(1);
+
+        countdown = findViewById(R.id.countdown);
 
 //        try {
 //            int input_size =96;
@@ -237,7 +257,7 @@ public class OpenCamera extends AppCompatActivity implements CameraBridgeViewBas
 
 
 
-
+    //PROSESS PENGENALAN WAJAH
 
 
 
@@ -278,6 +298,7 @@ public class OpenCamera extends AppCompatActivity implements CameraBridgeViewBas
         Core.flip(mat_image.t(), mat_image, -1);
         Mat grayscaleImage = new Mat();
 
+
         Imgproc.cvtColor(mat_image,grayscaleImage,Imgproc.COLOR_RGBA2GRAY);
         //Imgproc.resize(mat_image, mat_image, mat_image.size());
         height=grayscaleImage.height();
@@ -314,32 +335,43 @@ public class OpenCamera extends AppCompatActivity implements CameraBridgeViewBas
             ByteBuffer byteBuffer = convertedBitmaptoBuffer(scaledBitmap);
             //now create output
             //float[][] face_value = new float[1][2];
-            float[][] face_value = new float[1][2];
+            float[][] face_value = new float[1][1];
             interpreter.run(byteBuffer, face_value);
             Log.d("face_recognition","Out :"+ Array.get(Array.get(face_value,0),0));
-            Log.d("face_recognition","Out :"+ Array.get(Array.get(face_value,0),1));
-            // read_face = (float) Array.get(face_value,0);
+            //Log.d("face_recognition","Out :"+ Array.get(Array.get(face_value,0),1));
+            float read_face = (float) Array.get(Array.get(face_value,0),0);
 //            Log.d("face_recognition","Out :"+ Array.get(Array.get(face_value,0),0));
 //            float read_face = (float) Array.get(Array.get(face_value,0),0);
             //now we will read face value
-            String face_name=get_face_name(face_value);
+            String face_name=get_face_name(read_face);
             Imgproc.putText(mat_image, ""+face_name, position, 2, scale, color, thickness);
-
+            if (face_name == "keanu"){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Stuff that updates the UI
+                        countdown.setVisibility(View.VISIBLE);
+                    }
+                });
+                handler.postDelayed(mToast, 2000);
+            }
         }
         return mat_image;
     }
 
-    private String get_face_name(float read_face[][]) {
-        String val="";
-        int max = findMaximumIndex(read_face);
-        if ( max == 0){
-            val = "Keanu";
-        }
-        else if(max == 1){
-            val = "hilda";
-        }
-        return val;
-    }
+//    private String get_face_name(float read_face[][]) {
+//        String val="";
+//        float a = (float) Array.get(Array.get(read_face,0),0);
+//        float b = (float) Array.get(Array.get(read_face,0),1);
+//        int max = findMaximumIndex(a,b);
+//        if ( max == 0){
+//            val = "Keanu";
+//        }
+//        else if(max == 1){
+//            val = "Hilda";
+//        }
+//        return val;
+//    }
 
 
     //Load model
@@ -352,19 +384,67 @@ public class OpenCamera extends AppCompatActivity implements CameraBridgeViewBas
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
     }
 
-    public int findMaximumIndex(float[ ][ ] a)
-    {
-        int largest = -1;
-        for(int row = 0; row < a.length; row++)
-        {
-            for(int col = 0; col < a[row].length; col++)
-            {
-                if(a[row][col] > largest)
-                {
-                    largest = col;
-                }
-            }
+    private String get_face_name(float read_face){
+        String val = "";
+        if(read_face>0 & read_face<0.5){
+            val = "keanu";
         }
-        return largest;
+        else if(read_face>0.5 & read_face<1.5){
+            val = "Billy";
+        }
+        return val;
     }
+
+    private Runnable mToast = new Runnable() {
+        @Override
+        public void run() {
+            popupAbsenSukses();
+        }
+    };
+
+    private void popupAbsenSukses(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        final View popupAbsen = getLayoutInflater().inflate(R.layout.popup_absen_sukes, null);
+        dialogBuilder.setView(popupAbsen);
+        AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
+    }
+
+
+
+
+
+//    public int findMaximumIndex(float a, float b)
+//    {
+//        int largest;
+//        if(a<b){
+//            largest = 0;
+//        }
+//        else if (b>a){
+//            largest = 1;
+//        }
+//        else {largest = 1000;}
+//
+//
+//        Log.d("face_recognition","Out :"+ largest);
+//        return largest;
+//    }
+//    public int findMaximumIndex(float[ ][ ] a)
+//    {
+//        Log.d("face_recognition","Out :"+ a.length);
+//        int largest = -1;
+//        float max = a[0][0];
+//        for(int row = 0; row < a.length; row++)
+//        {
+//            for(int col = 0; col < a[row].length; col++)
+//            {
+//                if(a[row][col] > max)
+//                {
+//                    largest = col;
+//                }
+//            }
+//        }
+//        Log.d("face_recognition","Out :"+ largest);
+//        return largest-1;
+//    }
 }

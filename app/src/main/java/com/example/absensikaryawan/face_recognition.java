@@ -5,6 +5,7 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.util.Log;
+import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -33,6 +34,7 @@ import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
+
 public class face_recognition extends AppCompatActivity {
     CascadeClassifier cascadeClassifier;
     Interpreter interpreter;
@@ -40,6 +42,7 @@ public class face_recognition extends AppCompatActivity {
     int height = 0;
     int width = 0;
     GpuDelegate gpuDelegate= null;
+
 
 
     face_recognition(AssetManager assetManager, Context context, String modelpath, int input_size) throws IOException{
@@ -206,4 +209,6 @@ public class face_recognition extends AppCompatActivity {
         long declaredLength = assetFileDescriptor.getDeclaredLength();
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
     }
+
+
 }

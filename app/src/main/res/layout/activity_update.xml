@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="25dp"
+    tools:context=".UpdateActivity">
+
+    <TextView
+        android:id="@+id/tvUpdateAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Update Data Anda"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/txUpdateUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUpdateAccount"
+        android:layout_marginTop="25dp"
+        android:drawablePadding="24dp"
+        android:hint="Username"
+        android:textSize="20dp"
+        app:drawableLeftCompat="@android:drawable/ic_menu_myplaces" />
+
+    <EditText
+        android:id="@+id/etUpdateName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txUpdateUsername"
+        android:layout_marginTop="12dp"
+        android:drawableLeft="@android:drawable/ic_menu_edit"
+        android:drawablePadding="24dp"
+        android:hint="Nama Anda" />
+
+    <EditText
+        android:id="@+id/etUpdatePassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etUpdateName"
+        android:layout_marginTop="12dp"
+        android:drawableLeft="@android:drawable/ic_menu_edit"
+        android:drawablePadding="24dp"
+        android:hint="Password"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/etUpdateDivisi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etUpdatePassword"
+        android:layout_marginTop="12dp"
+        android:drawableLeft="@android:drawable/ic_menu_edit"
+        android:drawablePadding="24dp"
+        android:hint="Divisi" />
+
+    <EditText
+        android:id="@+id/etUpdateJobdesk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etUpdateDivisi"
+        android:layout_marginTop="12dp"
+        android:drawableLeft="@android:drawable/ic_menu_edit"
+        android:drawablePadding="24dp"
+        android:hint="Jobdesk" />
+
+    <Button
+        android:id="@+id/btnUpdate"
+        android:layout_below="@id/etUpdateJobdesk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="UPDATE"/>
+
+</RelativeLayout>

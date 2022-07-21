@@ -4,7 +4,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,8 +36,8 @@ import org.opencv.imgproc.Imgproc;
 import java.sql.Date;
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity{
-    Button buttonMasuk, buttonKeluar, buttonDaftarWajah;
+public class MainActivity extends AppCompatActivity {
+    Button buttonMasuk, buttonKeluar, buttonEditData;
     TextView textName;
     TextClock textTime,textDate;
 //    SimpleDateFormat dateFormat, timeFormat;
@@ -54,10 +56,11 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         buttonMasuk = findViewById(R.id.buttonMasuk);
         buttonKeluar = findViewById(R.id.buttonKeluar);
-        buttonDaftarWajah = findViewById(R.id.buttonDaftarWajah);
+        buttonEditData = findViewById(R.id.buttonEditData);
         textName = findViewById(R.id.textName);
         textTime = findViewById(R.id.textTime);
         textDate = findViewById(R.id.textDate);
+        sessionManager = new SessionManager(MainActivity.this);
 
 //        calender = Calendar.getInstance();
 
@@ -69,9 +72,16 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        buttonEditData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,UpdateActivity.class));
+            }
+        });
+
         //menampilkan nama user dari sessionmanager
-        //name = sessionManager.getUserDetail().get(SessionManager.USERNAME);
-        textName.setText("Keanu");
+        name = sessionManager.getUserDetail().get(SessionManager.NAME);
+        textName.setText(name);
 
         this.textDate.setFormat12Hour(null);
         this.textTime.setFormat12Hour(null);
